@@ -1,0 +1,33 @@
+<mat-card>
+  <mat-spinner *ngIf="isLoading"></mat-spinner>
+  <form (submit)="onSaveTask(taskForm)" #taskForm="ngForm" *ngIf="!isLoading">
+    <mat-form-field>
+      <mat-select matInput type="text" [ngModel]="task.title" name="title" required #title="ngModel" placeholder="Title">
+          <mat-option *ngFor="let goal of myGoals" [value]="goal.title">
+            {{goal.title}}
+          </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+      <input matInput type="text" [ngModel]="task.content" name="content" required #content="ngModel" placeholder="Content">
+      <mat-error *ngIf="content.invalid">Wpisz tresc zadania</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+      <mat-label>Choose a date</mat-label>
+      <input matInput [matDatepicker]="picker" [ngModel]="plannedDate.value" name="plannedDate" #plannedDate ="ngModel">
+      <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+      <mat-datepicker #picker>
+      </mat-datepicker>
+    </mat-form-field>
+
+    <button
+    mat-raised-button
+    color="primary"
+    type="submit" *ngIf="!isLoading">Dodaj zadanie</button>
+  </form>
+</mat-card>
+
+
+

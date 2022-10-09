@@ -5,11 +5,11 @@ import { Goal } from "../goal.model";
 import { GoalsService } from "../goals.service";
 
 @Component({
-  selector:'app-goal-list',
-  templateUrl: './goal-list.component.html',
-  styleUrls: ['./goal-list.component.css']
+  selector:'app-my-goals',
+  templateUrl: './my-goals.component.html',
+  styleUrls: ['./my-goals.component.css']
 })
-export class GoalListComponent implements OnInit,OnDestroy{
+export class MyGoalsComponent implements OnInit,OnDestroy{
 
   goals:Goal[] = [];
   isLoading = false;
@@ -25,13 +25,12 @@ export class GoalListComponent implements OnInit,OnDestroy{
   ngOnInit(){
     this.isLoading = true;
     this.goalsService.getGoals();
-    this.userId = this.authService.getUserId();
 
+    this.userId = this.authService.getUserId();
     this.goalsSub = this.goalsService.getGoalsUpdateListener().subscribe((goals: Goal[])=>{
       this.isLoading = false;
       this.goals=goals;
     });
-
     this.userIsAuthenticated = this.authService.getIsAuth();
 
     this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated=>{

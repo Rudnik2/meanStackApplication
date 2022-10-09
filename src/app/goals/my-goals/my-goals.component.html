@@ -1,0 +1,32 @@
+<mat-spinner *ngIf="isLoading"></mat-spinner>
+
+<mat-accordion multi="true" *ngIf="goals.length>0 && !isLoading" >
+
+  <mat-expansion-panel *ngFor="let goal of goals">
+    <mat-expansion-panel-header *ngIf="userIsAuthenticated && userId===goal.creator">
+      Nazwa celu: {{goal.title}}
+    </mat-expansion-panel-header>
+
+    <ng-template matExpansionPanelContent *ngIf="userIsAuthenticated && userId===goal.creator">
+      <p >Poziom 3: {{goal.Poziom3}}</p>
+      <p >Rok zakończenia poziomu 3:    {{goal.Poziom3Date}}</p>
+
+      <p >Poziom 2: {{goal.Poziom2}}</p>
+      <p >Rok zakończenia poziomu 2:    {{goal.Poziom2Date}}</p>
+
+      <p >Poziom 1: {{goal.Poziom1}}</p>
+      <p >Rok zakończenia poziomu 1:    {{goal.Poziom1Date}}</p>
+
+      <p >Inspiration: {{goal.Inspiration}}</p>
+      <p >reasonWhy: {{goal.reasonWhy}}</p>
+      <p >Failure: {{goal.Failure}}</p>
+    </ng-template>
+
+    <mat-action-row *ngIf="userIsAuthenticated && userId===goal.creator">
+      <a mat-button color="primary" [routerLink]="['/edit',goal.id]">Edit</a>
+      <button mat-button color="warn" (click)="onDelete(goal.id!)">Delete</button>
+    </mat-action-row>
+
+  </mat-expansion-panel>
+</mat-accordion>
+<p class="info-text mat-body-1" *ngIf="goals.length <= 0 && !isLoading">Nie ma postów jeszcze</p>

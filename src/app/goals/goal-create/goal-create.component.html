@@ -46,6 +46,7 @@
       <input matInput type="text" [ngModel]="goal.Poziom1" name="Poziom1" required #Poziom1="ngModel" placeholder="Title">
       <mat-error *ngIf="Poziom1.invalid">Wpisz Poziom1</mat-error>
     </mat-form-field>
+
     <mat-form-field>
       <mat-label>Choose a date</mat-label>
       <input matInput [matDatepicker]="picker1" [ngModel]="datePoziom1.value" name="poziom1Date" #poziom1Date ="ngModel">

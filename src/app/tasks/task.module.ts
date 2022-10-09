@@ -4,16 +4,14 @@ import { FormsModule, ReactiveFormsModule } from "@angular/forms";
 import { RouterModule } from "@angular/router";
 
 import { AngularMaterialModule } from "../angular-material.module";
-import { GoalCreateComponent } from "./goal-create/goal-create.component";
-import { GoalListComponent } from "./goal-list/goal-list.component";
-import { MyGoalsComponent } from "./my-goals/my-goals.component";
+import { MyTasksComponent } from "./my-tasks/my-tasks.component";
+import { TaskCreateComponent } from "./task-create/task-create.component";
 
 
 @NgModule({
   declarations:[
-    GoalCreateComponent,
-    GoalListComponent,
-    MyGoalsComponent
+    TaskCreateComponent,
+    MyTasksComponent
   ],
   imports:[
     CommonModule,
@@ -23,4 +21,4 @@ import { MyGoalsComponent } from "./my-goals/my-goals.component";
     ReactiveFormsModule
   ]
 })
-export class GoalsModule{}
+export class TaskModule{}

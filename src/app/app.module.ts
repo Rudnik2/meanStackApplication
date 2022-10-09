@@ -15,6 +15,9 @@ import { ErrorComponent } from './error/error.component';
 import { AngularMaterialModule } from './angular-material.module';
 import { GoalsModule } from './goals/goals.module';
 import {AuthModule} from '../app/auth/auth.module';
+import { ProfileModule } from './profile/profile.module';
+import { TaskModule } from './tasks/task.module';
+import { CalendarComponentModule} from './calendar/calendar.module';
 
 
 @NgModule({
@@ -31,7 +34,10 @@ import {AuthModule} from '../app/auth/auth.module';
     HttpClientModule,
     AngularMaterialModule,
     GoalsModule,
-    AuthModule
+    AuthModule,
+    ProfileModule,
+    TaskModule,
+    CalendarComponentModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},
