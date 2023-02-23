@@ -9,7 +9,7 @@
 
     <!-- Poziom 3 -->
     <mat-form-field>
-      <textarea matInput rows="6" [ngModel]="goal.Poziom3" name="Poziom3" required #Poziom3="ngModel" placeholder="Content"></textarea>
+      <textarea matInput rows="6" [ngModel]="goal.Poziom3" name="Poziom3" required #Poziom3="ngModel" placeholder="Poziom 1"></textarea>
       <mat-error *ngIf="Poziom3.invalid">Wpisz tresc celu</mat-error>
     </mat-form-field>
 
@@ -43,7 +43,7 @@
 
     <!-- Poziom 1-->
     <mat-form-field>
-      <input matInput type="text" [ngModel]="goal.Poziom1" name="Poziom1" required #Poziom1="ngModel" placeholder="Title">
+      <input matInput type="text" [ngModel]="goal.Poziom1" name="Poziom1" required #Poziom1="ngModel" placeholder="Poziom 1">
       <mat-error *ngIf="Poziom1.invalid">Wpisz Poziom1</mat-error>
     </mat-form-field>
 
@@ -60,19 +60,19 @@
 
     <!-- Inspiration-->
     <mat-form-field>
-      <input matInput type="text" [ngModel]="goal.Inspiration" name="Inspiration" required #Inspiration="ngModel" placeholder="Title">
+      <input matInput type="text" [ngModel]="goal.Inspiration" name="Inspiration" required #Inspiration="ngModel" placeholder="Inspiration">
       <mat-error *ngIf="Inspiration.invalid">Wpisz tytul</mat-error>
     </mat-form-field>
 
     <!-- reasonWhy -->
     <mat-form-field>
-      <input matInput type="text" [ngModel]="goal.reasonWhy" name="reasonWhy" required #reasonWhy="ngModel" placeholder="Title">
+      <input matInput type="text" [ngModel]="goal.reasonWhy" name="reasonWhy" required #reasonWhy="ngModel" placeholder="Reason why you will do this">
       <mat-error *ngIf="reasonWhy.invalid">Wpisz tytul</mat-error>
     </mat-form-field>
 
     <!-- Failure -->
     <mat-form-field>
-      <input matInput type="text" [ngModel]="goal.Failure" name="Failure" required #Failure="ngModel" placeholder="Title">
+      <input matInput type="text" [ngModel]="goal.Failure" name="Failure" required #Failure="ngModel" placeholder="What if you fail">
       <mat-error *ngIf="Failure.invalid">Wpisz tytul</mat-error>
     </mat-form-field>
 

@@ -11,6 +11,24 @@ import { GoalsService } from "../../goals/goals.service";
 import { Task } from "../task.model";
 import { TasksService } from "../tasks.service";
 
+import * as _moment from 'moment';
+
+import {default as _rollupMoment,Moment} from 'moment';
+import { AuthData } from "src/app/auth/auth-data.model";
+
+const moment = _rollupMoment || _moment;
+
+export const MY_FORMATS = {
+  parse: {
+    dateInput: 'MM/DD/YYYY',
+  },
+  display: {
+    dateInput: 'MM/DD/YYYY',
+    YearLabel: 'MM/DD/YYYY',
+    yearA11yLabel: 'MM/DD/YYYY',
+  },
+};
+
 @Component({
   selector: 'app-task-create',
   templateUrl:'./task-create.component.html',
@@ -18,7 +36,7 @@ import { TasksService } from "../tasks.service";
 
 })
 export class TaskCreateComponent implements OnInit,OnDestroy{
-
+  checked = true;
   goals:Goal[] = [];
   myGoals:Goal[] = [];
   userId!: string;
@@ -38,21 +56,39 @@ export class TaskCreateComponent implements OnInit,OnDestroy{
     plannedDate:null,
     creator:null
   };
+  user: AuthData={
+    Imie:null,
+    Nazwisko:null,
+    email:null,
+    password:null,
+  };
 
   private taskId: string|null=null;
-
+  oldDate = new FormControl();
+  oldTask = new Date();
 
   constructor(public tasksService: TasksService,public goalsService: GoalsService, public route: ActivatedRoute,private authService:AuthService){}
 
+
   ngOnInit() {
+
     this.authStatusSub=this.authService.getAuthStatusListener().subscribe(authStatus=>{
       this.isLoading=false;
     });
 
     this.goals = this.goalsService.getGoals()!;
     this.userId = this.authService.getUserId();
-
     this.userIsAuthenticated = this.authService.getIsAuth();
+
+    if(this.userIsAuthenticated){
+      this.authService.getUser(this.authService.getUserId()).subscribe(userData=>{
+        this.user.Imie = userData.Imie,
+        this.user.Nazwisko = userData.Nazwisko,
+        this.user.email = userData.email
+      });
+    }
+
+
     this.goalsSub = this.goalsService.getGoalsUpdateListener().subscribe((goals: Goal[])=>{
       this.isLoading = false;
       this.goals=goals;
@@ -63,9 +99,6 @@ export class TaskCreateComponent implements OnInit,OnDestroy{
         }
       }
     });
-
-
-
 
     this.route.paramMap.subscribe((paramMap: ParamMap)=>{
       if(paramMap.has("taskId")){
@@ -79,7 +112,12 @@ export class TaskCreateComponent implements OnInit,OnDestroy{
             title:taskData.title,
             content:taskData.content,
             plannedDate:taskData.plannedDate,
-            creator:taskData.creator};
+            creator:taskData.creator,
+            isDone:taskData.isDone};
+
+            this.oldTask = new Date(taskData.plannedDate!);
+            this.oldDate.setValue(this.oldTask);
+
         });
       }else{
         this.mode="create";
@@ -90,6 +128,7 @@ export class TaskCreateComponent implements OnInit,OnDestroy{
   ngOnDestroy(){
     this.authStatusSub.unsubscribe();
   }
+
   onSaveTask(form: NgForm){
     if(form.invalid){
       return;
@@ -99,13 +138,18 @@ export class TaskCreateComponent implements OnInit,OnDestroy{
       this.tasksService.addTask(
         form.value.title,
         form.value.content,
-        form.value.plannedDate);
+        form.value.plannedDate,
+        form.value.repeatable);
     }else {
       this.tasksService.updateTasks(
         this.taskId!,
         form.value.title,
         form.value.content,
-        form.value.plannedDate);
+        form.value.plannedDate,
+        false,
+        null,
+        form.value.repeatable
+        );
     }
       form.resetForm();
   }

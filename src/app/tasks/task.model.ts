@@ -5,6 +5,11 @@ export interface Task {
   content?: string|null;
   plannedDate?:Date|null;
 
-  creator:string|null;
+  creator?:string|null;
+  creatorName?:string|null;
+  creatorImage?:string|null;
+  isDone?:boolean;
+  taskComplitionDate?:Date|null;
+  repeatable?:boolean;
 }
 

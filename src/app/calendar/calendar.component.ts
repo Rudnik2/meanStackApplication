@@ -3,6 +3,8 @@ import {
   ChangeDetectionStrategy,
   ViewChild,
   TemplateRef,
+  OnInit,
+  OnDestroy,
 } from '@angular/core';
 import {
   startOfDay,
@@ -14,7 +16,7 @@ import {
   isSameMonth,
   addHours,
 } from 'date-fns';
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import {
   CalendarEvent,
@@ -23,6 +25,10 @@ import {
   CalendarView,
 } from 'angular-calendar';
 import { EventColor } from 'calendar-utils';
+import { TasksService } from '../tasks/tasks.service';
+import { AuthService } from '../auth/auth.service';
+import { Task } from '../tasks/task.model';
+import { Router } from "@angular/router";
 
 const colors: Record<string, EventColor> = {
   red: {
@@ -40,28 +46,27 @@ const colors: Record<string, EventColor> = {
 };
 
 @Component({
-  selector: 'mwl-demo-component',
+  selector: 'app-calendar',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styles: [
-    `
-      h3 {
-        margin: 0 0 10px;
-      }
-
-      pre {
-        background-color: #f5f5f5;
-        padding: 15px;
-      }
-    `,
-  ],
+  styleUrls: ['calendar.component.css'],
   templateUrl: 'calendar.component.html',
 })
-export class CalendarComponent {
+export class CalendarComponent implements OnInit,OnDestroy{
   @ViewChild('modalContent', { static: true }) modalContent: TemplateRef<any>;
 
   view: CalendarView = CalendarView.Month;
 
   CalendarView = CalendarView;
+
+  task:Task={
+    id: null,
+    title: null,
+    content:null,
+    plannedDate:null,
+    creator:null,
+    isDone:false,
+    taskComplitionDate:null
+  };
 
   viewDate: Date = new Date();
 
@@ -75,65 +80,83 @@ export class CalendarComponent {
       label: '<i class="fas fa-fw fa-pencil-alt"></i>',
       a11yLabel: 'Edit',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.handleEvent('Edited', event);
+        this.editEvent(event);
       },
     },
     {
       label: '<i class="fas fa-fw fa-trash-alt"></i>',
       a11yLabel: 'Delete',
       onClick: ({ event }: { event: CalendarEvent }): void => {
-        this.events = this.events.filter((iEvent) => iEvent !== event);
-        this.handleEvent('Deleted', event);
+        this.deleteEvent(event);
+
+      },
+    },
+    {
+      label: '<i class="fas fa-fw fa-award"></i>',
+      a11yLabel: 'Complete',
+      onClick: ({ event }: { event: CalendarEvent }): void => {
+        this.completeEvent(event);
       },
     },
   ];
 
   refresh = new Subject<void>();
+  activeDayIsOpen: boolean = false;
+  events: CalendarEvent[]=[];
+  tasks:Task[] = [];
+  todayTasks:Task[] = [];
+  isLoading = false;
+  userIsAuthenticated = false;
+  userId!: string;
+  myTasks: Task[] = [];
+  date = new Date();
 
-  events: CalendarEvent[] = [
-    {
-      start: subDays(startOfDay(new Date()), 1),
-      end: addDays(new Date(), 1),
-      title: 'A 3 day event',
-      color: { ...colors.red },
-      actions: this.actions,
-      allDay: true,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-    {
-      start: startOfDay(new Date()),
-      title: 'An event with no end date',
-      color: { ...colors.yellow },
-      actions: this.actions,
-    },
-    {
-      start: subDays(endOfMonth(new Date()), 3),
-      end: addDays(endOfMonth(new Date()), 3),
-      title: 'A long event that spans 2 months',
-      color: { ...colors.blue },
-      allDay: true,
-    },
-    {
-      start: addHours(startOfDay(new Date()), 2),
-      end: addHours(new Date(), 2),
-      title: 'A draggable and resizable event',
-      color: { ...colors.yellow },
-      actions: this.actions,
-      resizable: {
-        beforeStart: true,
-        afterEnd: true,
-      },
-      draggable: true,
-    },
-  ];
 
-  activeDayIsOpen: boolean = true;
+  constructor(private modal: NgbModal,public tasksService: TasksService, private authService: AuthService,private router: Router) {}
 
-  constructor(private modal: NgbModal) {}
+  private tasksSub: Subscription = new Subscription;
+  private authStatusSub: Subscription = new Subscription;
+
+  ngOnInit(){
+    this.isLoading = true;
+    this.tasksService.getTasks();
+
+    this.userId = this.authService.getUserId();
+    this.tasksSub = this.tasksService.getTasksUpdateListener().subscribe((tasks: Task[])=>{
+      this.isLoading = false;
+      this.tasks=tasks;
+
+      for(let task of this.tasks){
+        if(this.userIsAuthenticated && this.userId==task.creator&&task.isDone!=true){
+          this.myTasks.push(task);
+        }
+      }
+
+      for(let task of this.myTasks){
+        this.date = new Date(task.plannedDate!);
+        this.events.push({
+          id:task.id!,
+          start:this.date,
+          title:task.content!,
+          color: { ...colors.red },
+          actions: this.actions,
+          allDay:true
+        });
+      }
+      this.refresh.next();
+    });
+    this.userIsAuthenticated = this.authService.getIsAuth();
+
+    this.authStatusSub = this.authService.getAuthStatusListener().subscribe(isAuthenticated=>{
+       this.userIsAuthenticated = isAuthenticated;
+       this.userId = this.authService.getUserId();
+    });
+  }
+
+  ngOnDestroy(){
+    this.tasksSub.unsubscribe();
+    this.authStatusSub.unsubscribe();
+  }
 
   dayClicked({ date, events }: { date: Date; events: CalendarEvent[] }): void {
     if (isSameMonth(date, this.viewDate)) {
@@ -172,27 +195,30 @@ export class CalendarComponent {
     this.modal.open(this.modalContent, { size: 'lg' });
   }
 
-  addEvent(): void {
-    this.events = [
-      ...this.events,
-      {
-        title: 'New event',
-        start: startOfDay(new Date()),
-        end: endOfDay(new Date()),
-        color: colors.red,
-        draggable: true,
-        resizable: {
-          beforeStart: true,
-          afterEnd: true,
-        },
-      },
-    ];
-  }
-
   deleteEvent(eventToDelete: CalendarEvent) {
+    this.tasksService.deleteTask(eventToDelete.id!);
     this.events = this.events.filter((event) => event !== eventToDelete);
+    //this.activeDayIsOpen = false;
+    this.ngOnDestroy();
   }
+  completeEvent(eventToComplete: CalendarEvent) {
 
+    this.tasksService.getTask(eventToComplete.id!).subscribe(taskData=>{
+      this.task.id = taskData._id,
+      this.task.title = taskData.title,
+      this.task.content = taskData.content,
+      this.task.plannedDate = taskData.plannedDate
+      this.task.repeatable = taskData.repeatable
+
+      const now = new Date();
+      this.tasksService.updateTasks(this.task.id,this.task.title,this.task.content,this.task.plannedDate,true,now,this.task.repeatable);
+    });
+    this.events = this.events.filter((event) => event !== eventToComplete);
+      this.ngOnDestroy();
+  }
+  editEvent(eventToEdit: CalendarEvent) {
+    this.router.navigate(["/task/edit/",eventToEdit.id]);
+  }
   setView(view: CalendarView) {
     this.view = view;
   }

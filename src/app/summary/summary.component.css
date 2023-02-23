@@ -1,0 +1,13 @@
+.info-text {
+  text-align: center;
+}
+:host {
+  display: block;
+  margin-top: 1rem;
+}
+mat-spinner{
+  margin:auto;
+}
+mat-card{
+  margin-bottom:1rem;
+}

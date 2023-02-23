@@ -1,12 +1,11 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { AuthData } from "./auth-data.model";
 import {map} from 'rxjs/operators';
 import {environment} from "../../environments/environment.prod";
 import { response } from "express";
-import { SummaryService } from "../summary/summary.service";
 
 const BACKEND_URL = environment.apiUrl+"/user/";
 
@@ -28,7 +27,7 @@ export class AuthService{
   private users: AuthData[]=[];
   private usersUpdated = new Subject<AuthData[]>();
 
-  constructor(private http: HttpClient,private router: Router,private summaryService: SummaryService){
+  constructor(private http: HttpClient,private router: Router){
     this.router.routeReuseStrategy.shouldReuseRoute = () => false;
   }
 
@@ -47,10 +46,10 @@ export class AuthService{
 
 
   createUser(imie:string,nazwisko:string,email:string,password:string){
-    const authData: AuthData = {Imie:imie,Nazwisko:nazwisko,email:email, password:password};
-    this.http.post(BACKEND_URL+"/signup",authData).subscribe(response=>{
-      this.summaryService.createSummary();
-      this.router.navigate(['/'])
+    const now = new Date();
+    const authData: AuthData = {Imie:imie,Nazwisko:nazwisko,email:email, password:password,summaryType:"Miesieczne",summaryNotificationDate:now};
+    this.http.post(BACKEND_URL+"signup",authData).subscribe(response=>{
+      this.router.navigate(['/login'])
     },error=>{
      this.authStatusListener.next(false);
     });
@@ -70,8 +69,7 @@ export class AuthService{
         const now = new Date();
         const expirationDate = new Date(now.getTime()+expiresInDuration*1000);
         this.saveAuthData(token,expirationDate,this.userId);
-        this.summaryService.updateSummary(this.userId);
-        this.router.navigate(['/']);
+        this.router.navigate(['/newsFeed']);
       }
     },error=>{
       this.authStatusListener.next(false);
@@ -120,7 +118,9 @@ export class AuthService{
       password:string,
       imagePath:string,
       followers:Array<string>,
-      followings: Array<string>}>(BACKEND_URL+id);
+      followings: Array<string>,
+      summaryType:string,
+      summaryNotificationDate:Date}>(BACKEND_URL+id);
   }
 
    getUsers(){
@@ -131,14 +131,18 @@ export class AuthService{
            Nazwisko: any;
             email: any;
              password: any;
-            imagePath: any})=>{
+            imagePath: any;
+            summaryType:any;
+            summaryNotificationDate:any})=>{
           return {
               id: user._id,
               Imie: user.Imie,
               Nazwisko: user.Nazwisko,
               email:user.email,
               password: user.password,
-              imagePath: user.imagePath
+              imagePath: user.imagePath,
+              summaryType:user.summaryType,
+              summaryNotificationDate:user.summaryNotificationDate
           };
         });
     })).subscribe((transformedUsers)=>{
@@ -146,31 +150,36 @@ export class AuthService{
       this.usersUpdated.next([...this.users]);
     });
   }
-  updateUsers(
+
+  changeImage(
     id:string,
     Imie:string,
     Nazwisko:string,
     email:string,
     password:string,
-    image: File){
+    image: File,
+    followers:Array<string>,
+    followings:Array<string>){
 
       const userData = new FormData();
-      userData.append("id",id);
-      userData.append("Imie",Imie);
-      userData.append("Nazwisko",Nazwisko);
-      userData.append("email",email);
-      userData.append("password",password);
-      userData.append("image",image,email);
+        userData.append("id",id);
+        userData.append("Imie",Imie);
+        userData.append("Nazwisko",Nazwisko);
+        userData.append("email",email);
+        userData.append("password",password);
+        userData.append("image",image);
 
 
-    this.http.put(BACKEND_URL+id,userData).subscribe((res:any)=>{
-      const user: AuthData = {id:id,Imie:Imie,Nazwisko:Nazwisko,email:email,password:password,imagePath:res.user.imagePath};
+
+    this.http.put(BACKEND_URL+"changeImage/"+id,userData).subscribe((res:any)=>{
+      console.log(res.imagePath);
+      const user: AuthData = {id:id,Imie:Imie,Nazwisko:Nazwisko,email:email,password:password,imagePath:res.imagePath,followers:followers,followings:followings};
       const updatedUsers = [...this.users];
       const oldUserIndex = updatedUsers.findIndex(p=>p.id === id);
       updatedUsers[oldUserIndex]=user;
       this.users=updatedUsers;
       this.usersUpdated.next([...this.users]);
-      this.router.navigate(["/"]);
+      this.router.navigate(["/newsFeed"]);
     });
   }
 
@@ -242,6 +251,29 @@ export class AuthService{
     });
   }
 
+  updateSummary(
+    userId:string,
+    summaryType:string,
+    summaryNotificationDate:Date){
+
+
+      const user: AuthData ={
+        id: userId,
+        summaryType: summaryType,
+        summaryNotificationDate: summaryNotificationDate
+      }
+
+      this.http.put(BACKEND_URL+"notification/"+userId,user).subscribe((res:any)=>{
+
+      const updatedUsers = [...this.users];
+      const oldUserIndex = updatedUsers.findIndex(p=>p.id === user.id);
+      updatedUsers[oldUserIndex]=user;
+      this.users=updatedUsers;
+      this.usersUpdated.next([...this.users]);
+
+    });
+  }
+
   private getAuthData(){
     const token = localStorage.getItem("token");
     const expirationDate = localStorage.getItem("expiration");
@@ -269,5 +301,23 @@ export class AuthService{
   }
   getUsersUpdateListener(){
     return this.usersUpdated.asObservable();
+  }
+
+  verifyUser(code:string){
+    this.http.get(BACKEND_URL + "confirm/" + code).subscribe((response:any) => {
+      return response.data;
+    });
+  };
+
+  requestReset(body:any): Observable<any> {
+    return this.http.post(BACKEND_URL+`/req-reset-password`, body);
+  }
+
+  newPassword(body:any): Observable<any> {
+    return this.http.post(BACKEND_URL+`/new-password`, body);
+  }
+
+  ValidPasswordToken(body:any): Observable<any> {
+    return this.http.post(BACKEND_URL+'/valid-password-token', body);
   }
 }

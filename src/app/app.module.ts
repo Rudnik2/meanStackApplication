@@ -17,7 +17,19 @@ import { GoalsModule } from './goals/goals.module';
 import {AuthModule} from '../app/auth/auth.module';
 import { ProfileModule } from './profile/profile.module';
 import { TaskModule } from './tasks/task.module';
-import { CalendarComponentModule} from './calendar/calendar.module';
+import {CalendarComponentModule} from './calendar/calendar.module';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { SearchModule } from './search/search.module';
+import { MatIconModule } from '@angular/material/icon';
+import { NotificationModule } from './notification/notification.module';
+import { SummaryModule } from './summary/summary.module';
+import { MainPageModule } from './main-page/main-page.module';
+import { verifiedWelcomePageModule } from './verifiedWelcomePage/verifiedWelcomePage.module';
+import { RequestResetModule } from './request-reset-password/request-reset-password.module';
+import { ResponseResetModule } from './response-reset-password/response-reset-password.module';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+
+
 
 
 @NgModule({
@@ -37,7 +49,17 @@ import { CalendarComponentModule} from './calendar/calendar.module';
     AuthModule,
     ProfileModule,
     TaskModule,
-    CalendarComponentModule
+    CalendarComponentModule,
+    NgbModule,
+    MatIconModule,
+    SearchModule,
+    NotificationModule,
+    SummaryModule,
+    MainPageModule,
+    verifiedWelcomePageModule,
+    RequestResetModule,
+    ResponseResetModule,
+    MatCheckboxModule
   ],
   providers: [
     {provide: HTTP_INTERCEPTORS,useClass:AuthInterceptor,multi:true},

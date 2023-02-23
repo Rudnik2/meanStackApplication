@@ -22,7 +22,7 @@
       <p >Failure: {{goal.Failure}}</p>
     </ng-template>
 
-    <mat-action-row *ngIf="userIsAuthenticated && userId===goal.creator">
+    <mat-action-row *ngIf="userIsAuthenticated && userId===goal.creator&& this.mode=='myProfile'">
       <a mat-button color="primary" [routerLink]="['/edit',goal.id]">Edit</a>
       <button mat-button color="warn" (click)="onDelete(goal.id!)">Delete</button>
     </mat-action-row>

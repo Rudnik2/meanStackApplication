@@ -135,6 +135,7 @@ export class GoalCreateComponent implements OnInit,OnDestroy{
           ctrlValue = this.datePoziom2.value!;
           ctrlValue.year(goalData.Poziom2Date);
           this.datePoziom2.setValue(ctrlValue);
+          console.log(this.datePoziom2.value);
 
           this.datePoziom1 = new FormControl(moment());
           ctrlValue = this.datePoziom1.value!;

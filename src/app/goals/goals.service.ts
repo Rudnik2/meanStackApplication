@@ -110,7 +110,7 @@ export class GoalsService{
       goal.id = id;
       this.goals.push(goal);
       this.goalsUpdated.next([...this.goals]);
-      this.router.navigate(["/"]);
+      this.router.navigate(["/newsFeed"]);
     });
   }
 
@@ -122,6 +122,7 @@ export class GoalsService{
     Inspiration:string,
     reasonWhy: string,
     Failure:string){
+
     const goal: Goal = {
       id:id,
       title:title,
@@ -142,7 +143,7 @@ export class GoalsService{
       updatedGoals[oldGoalIndex]=goal;
       this.goals=updatedGoals;
       this.goalsUpdated.next([...this.goals]);
-      this.router.navigate(["/"]);
+      this.router.navigate(["/newsFeed"]);
     });
   }
 

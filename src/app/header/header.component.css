@@ -11,3 +11,25 @@ a{
 .spacer{
   flex: 1 1  auto;
 }
+mat-form-field{
+  font-size: 12px;
+}
+mat-icon{
+  font-size: 12px;
+  text-align:left;
+}
+
+input{
+  font-size: 14px;
+}
+.spacer2{
+  margin-top:15px;
+}
+.material-table{
+  width: 20%;
+}
+mat-table{
+  width: auto;
+
+}
+

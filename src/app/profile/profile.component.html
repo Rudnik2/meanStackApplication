@@ -1,5 +1,28 @@
-<a mat-button routerLink="/profile/myGoals" routerLinkActive="mat-accent">Moje cele</a>
-
-<a mat-button routerLink="/profile/todayTasks" routerLinkActive="mat-accent">Moje zadania na dziś</a>
-
-<a mat-button routerLink="/profile/calendar" routerLinkActive="mat-accent">Kalendarz</a>
+<div class="container">
+  <div class="user-image">
+    <img [src]="user.imagePath">
+  </div>
+  <div class="subNavigation">
+    <a mat-button routerLink="/profile/myGoals" routerLinkActive="mat-accent" *ngIf="this.mode =='myProfile'">Moje cele</a>
+    <a mat-button [routerLink]="['/profile/myGoals/',userId]" routerLinkActive="mat-accent" *ngIf="this.mode=='userProfile'">Cele {{this.user.Imie}}</a>
+    <a mat-button routerLink="/profile/todayTasks" routerLinkActive="mat-accent" *ngIf="this.mode =='myProfile'">Moje zadania na dziś</a>
+    <a mat-button routerLink="/profile/calendar" routerLinkActive="mat-accent" *ngIf="this.mode =='myProfile'">Kalendarz</a>
+    <a mat-button routerLink="/profile/summary" routerLinkActive="mat-accent" *ngIf="this.mode =='myProfile'">Podsumowanie</a>
+  </div>
+  <div class="content-main">
+    <br/>
+    <button mat-raised-button color="primary" (click)="follow()" *ngIf="this.mode == 'userProfile'&& !alreadyFollowed">Follow</button>
+    <button mat-raised-button color="primary" (click)="unFollow()" *ngIf="this.mode == 'userProfile'&& alreadyFollowed">Unfollow</button>
+    <form [formGroup]="form" (submit)="onSaveImage()" *ngIf="this.mode =='myProfile'">
+      <div>
+        <button mat-raised-button color="primary" (click)="filePicker.click()">Wybierz zdjęcie</button>
+        <input type="file" #filePicker (change)="onImagePicked($event)">
+      </div>
+      <br/>
+      <div class="image-preview" *ngIf="imagePreview !== '' && imagePreview && form.get('image')!.valid">
+        <img [src]="imagePreview">
+      </div>
+      <button mat-raised-button color="primary" type="submit">Załaduj zdjęcie</button>
+    </form>
+  </div>
+</div>

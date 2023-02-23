@@ -8,6 +8,7 @@ router.post("",checkAuth,TaskController.createTask);
 
 
 router.get('',TaskController.getAllTasks);
+router.get('/scroll/:id',TaskController.getAllTasksScroll);
 
 router.put("/:id",checkAuth,TaskController.updateTask);
 

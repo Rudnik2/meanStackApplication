@@ -16,11 +16,15 @@
 
     <mat-form-field>
       <mat-label>Choose a date</mat-label>
-      <input matInput [matDatepicker]="picker" [ngModel]="plannedDate.value" name="plannedDate" #plannedDate ="ngModel">
+      <input matInput [matDatepicker]="picker" [ngModel]="oldDate.value" name="plannedDate" #plannedDate ="ngModel">
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
       <mat-datepicker #picker>
       </mat-datepicker>
     </mat-form-field>
+
+    <mat-checkbox class="example-margin" [ngModel]="task.repeatable" name="repeatable" #repeatable="ngModel">Powtarzające się zadanie</mat-checkbox>
+    <br />
+    <br />
 
     <button
     mat-raised-button

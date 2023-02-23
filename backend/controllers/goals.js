@@ -1,8 +1,7 @@
 const Goal = require("../models/goal");
 
 exports.createGoal = (req,res,next)=>{
-  console.log(req.body.Poziom2Date); // == Poziom3Date
-  console.log(req.body.Poziom3Date);
+
   const goal = new Goal({
     title: req.body.title,
 
@@ -35,6 +34,7 @@ exports.createGoal = (req,res,next)=>{
 };
 
 exports.updateGoal = (req,res,next)=>{
+  console.log(req.userData);
   const goal = new Goal({
     _id: req.body.id,
     title:req.body.title,

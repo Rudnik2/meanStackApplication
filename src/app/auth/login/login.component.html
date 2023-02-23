@@ -6,9 +6,11 @@
       <mat-error *ngIf="emailInput.invalid">Wpisz poprawny e-mail</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input type="password" name="password" ngModel matInput placeholder="Hasło" #passwordInput="ngModel" required>
+      <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
       <mat-error *ngIf="passwordInput.invalid">Wpisz poprawne hasło</mat-error>
     </mat-form-field>
+    <a routerLink="/request-reset-password" routerLinkActive="mat-accent">Zapomniałem hasła</a>
+    <br/>
     <button
     mat-raised-button
     color="primary"

@@ -4,6 +4,7 @@ const router = express.Router();
 const checkAuth = require("../middleware/chech-auth");
 const GoalController = require("../controllers/goals");
 
+
 router.post("",checkAuth,GoalController.createGoal);
 
 

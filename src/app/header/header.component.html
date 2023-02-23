@@ -1,15 +1,23 @@
 <mat-toolbar color="primary">
-  <span><a routerLink="/">My Posts</a></span>
+
+  <span class="title"><a routerLink="/newsFeed">My Posts</a></span>
   <span class="spacer"></span>
+
+
   <ul>
+    <li *ngIf="userIsAuthenticated">
+      <a routerLink="/search" routerLinkActive="mat-accent">
+        <mat-icon class='search-icon'>search</mat-icon>
+      </a>
+    </li>
     <li *ngIf="userIsAuthenticated">
       <a mat-button routerLink="/task" routerLinkActive="mat-accent">Dodaj Zadanie</a>
     </li>
     <li *ngIf="userIsAuthenticated">
-      <a mat-button routerLink="/create" routerLinkActive="mat-accent">Create Post</a>
+      <a mat-button routerLink="/create" routerLinkActive="mat-accent">Dodaj cel</a>
     </li>
     <li *ngIf="userIsAuthenticated">
-      <a mat-button routerLink="/profile" routerLinkActive="mat-accent">Mój Profil</a>
+      <a mat-button routerLink="/profile" routerLinkActive="mat-accent">Mój profil</a>
     </li>
 
     <li *ngIf="!userIsAuthenticated">
