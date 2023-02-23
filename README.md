@@ -2,9 +2,13 @@
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 14.1.0.
 
-## Development server
+## Running frontend application
 
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+
+## Running backend application
+
+Run `npm run startServer` for a backend server. Navigate to `http://localhost:3000/`. The application will automatically reload if you change any of the source files.
 
 ## Code scaffolding
 
