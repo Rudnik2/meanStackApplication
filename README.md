@@ -34,11 +34,11 @@ To get more help on the Angular CLI use `ng help` or go check out the [Angular C
 
 The application was developed using technologies described by MEAN. The functionalities included in the project are:
 
-Login, registration, authorization, and authentication
-Ability to add goals and tasks
-Implemented calendar, which makes it easier to manage previously saved tasks
-Adding a photo to your profile
-Following other application users
-Weekly/monthly summaries of completed tasks
-User authorization through email confirmation
-Ability to change password when the previous one is forgotten.
+- Login, registration, authorization, and authentication
+- Ability to add goals and tasks
+- Implemented calendar, which makes it easier to manage previously saved tasks
+- Adding a photo to your profile
+- Following other application users
+- Weekly/monthly summaries of completed tasks
+- User authorization through email confirmation
+- Ability to change password when the previous one is forgotten.
