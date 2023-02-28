@@ -29,3 +29,16 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Implemented functionalities
+
+The application was developed using technologies described by MEAN. The functionalities included in the project are:
+
+Login, registration, authorization, and authentication
+Ability to add goals and tasks
+Implemented calendar, which makes it easier to manage previously saved tasks
+Adding a photo to your profile
+Following other application users
+Weekly/monthly summaries of completed tasks
+User authorization through email confirmation
+Ability to change password when the previous one is forgotten.
