@@ -1,12 +1,20 @@
-  <div class="material-table">
+<div class="material-table">
+  <mat-form-field appearance="fill">
+    <mat-label>Search user</mat-label>
+    <input
+      matInput
+      (keyup)="filterCountries(searchTerm)"
+      [(ngModel)]="searchTerm"
+    />
+    <mat-icon
+      class="search-icon"
+      matPrefix
+      (click)="filterCountries(searchTerm)"
+      >search</mat-icon
+    >
+  </mat-form-field>
 
-    <mat-form-field appearance="fill">
-      <mat-label>Search user</mat-label>
-      <input matInput (keyup)="filterCountries(searchTerm)" [(ngModel)]="searchTerm"/>
-      <mat-icon class='search-icon' matPrefix (click)="filterCountries(searchTerm)">search</mat-icon>
-    </mat-form-field>
-
-    <mat-table
+  <mat-table
     #table
     *ngIf="dataSource"
     [dataSource]="dataSource"
@@ -14,30 +22,27 @@
     (matSortChange)="onMatSortChange()"
     matSortDirection="asc"
     multiTemplateDataRows
-    class="mat-elevation-z8">
-    
+    class="mat-elevation-z8"
+  >
     <!-- Position Column -->
     <ng-container matColumnDef="Profilowe">
-      <mat-header-cell *matHeaderCellDef>Profilowe</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef></mat-header-cell>
       <mat-cell *matCellDef="let element">
-        <img
-          [src]="element.imagePath"
-          height="40"
-          width="40"
-          alt="Profilowe"
-        />
+        <img [src]="element.imagePath" height="40" width="40" alt="Profilowe" />
       </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="Imie">
       <mat-header-cell *matHeaderCellDef mat-sort-header="Imie">
-        Imie
+        Name
       </mat-header-cell>
       <mat-cell *matCellDef="let element">{{ element.Imie }}</mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="Nazwisko">
-      <mat-header-cell *matHeaderCellDef mat-sort-header="Nazwisko">Nazwisko</mat-header-cell>
+      <mat-header-cell *matHeaderCellDef mat-sort-header="Nazwisko"
+        >Surname</mat-header-cell
+      >
       <mat-cell *matCellDef="let element">{{ element.Nazwisko }}</mat-cell>
     </ng-container>
 
@@ -48,5 +53,5 @@
       (click)="navigateTo(row)"
       class="detail-row"
     ></mat-row>
-   </mat-table>
-  </div>
+  </mat-table>
+</div>

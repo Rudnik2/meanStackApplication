@@ -1,22 +1,27 @@
 <mat-spinner *ngIf="isLoading"></mat-spinner>
 
-<mat-accordion multi="true" *ngIf="goals.length>0 && !isLoading&&this.userIsAuthenticated" >
+<mat-accordion
+  multi="true"
+  *ngIf="goals.length > 0 && !isLoading && this.userIsAuthenticated"
+>
   <mat-expansion-panel *ngFor="let goal of followGoals">
     <mat-expansion-panel-header>
-      Nazwa celu: {{goal.title}}
+      Goal title: {{ goal.title }}
     </mat-expansion-panel-header>
-    <p>Poziom 3: {{goal.Poziom3}}</p>
-    <p>Rok zakończenia poziomu 3:    {{goal.Poziom3Date}}</p>
+    <p>Level 3: {{ goal.Poziom3 }}</p>
+    <p>Year of complition level 3: {{ goal.Poziom3Date }}</p>
 
-    <p>Poziom 2: {{goal.Poziom2}}</p>
-    <p>Rok zakończenia poziomu 2:    {{goal.Poziom2Date}}</p>
+    <p>Level 2: {{ goal.Poziom2 }}</p>
+    <p>Year of complition level 2: {{ goal.Poziom2Date }}</p>
 
-    <p>Poziom 1: {{goal.Poziom1}}</p>
-    <p>Rok zakończenia poziomu 1:    {{goal.Poziom1Date}}</p>
+    <p>Level 1: {{ goal.Poziom1 }}</p>
+    <p>Year of complition level 1: {{ goal.Poziom1Date }}</p>
 
-    <p>Inspiration: {{goal.Inspiration}}</p>
-    <p>reasonWhy: {{goal.reasonWhy}}</p>
-    <p>Failure: {{goal.Failure}}</p>
+    <p>Inspiration for your goal: {{ goal.Inspiration }}</p>
+    <p>Reason why you want to achieve this goal: {{ goal.reasonWhy }}</p>
+    <p>What if you fail: {{ goal.Failure }}</p>
   </mat-expansion-panel>
 </mat-accordion>
-<p class="info-text mat-body-1" *ngIf="goals.length <= 0 && !isLoading">Nie ma postów jeszcze</p>
+<p class="info-text mat-body-1" *ngIf="goals.length <= 0 && !isLoading">
+  There are no goal's there yet
+</p>

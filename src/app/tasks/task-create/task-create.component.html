@@ -2,36 +2,64 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form (submit)="onSaveTask(taskForm)" #taskForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
-      <mat-select matInput type="text" [ngModel]="task.title" name="title" required #title="ngModel" placeholder="Title">
-          <mat-option *ngFor="let goal of myGoals" [value]="goal.title">
-            {{goal.title}}
-          </mat-option>
+      <mat-select
+        matInput
+        type="text"
+        [ngModel]="task.title"
+        name="title"
+        required
+        #title="ngModel"
+        placeholder="Title"
+      >
+        <mat-option *ngFor="let goal of myGoals" [value]="goal.title">
+          {{ goal.title }}
+        </mat-option>
       </mat-select>
+      <mat-error *ngIf="content.invalid"
+        >Choose one of your goals to associate task to</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field>
-      <input matInput type="text" [ngModel]="task.content" name="content" required #content="ngModel" placeholder="Content">
-      <mat-error *ngIf="content.invalid">Wpisz tresc zadania</mat-error>
+      <input
+        matInput
+        type="text"
+        [ngModel]="task.content"
+        name="content"
+        required
+        #content="ngModel"
+        placeholder="Description"
+      />
+      <mat-error *ngIf="content.invalid"
+        >Enter description of your task</mat-error
+      >
     </mat-form-field>
 
     <mat-form-field>
       <mat-label>Choose a date</mat-label>
-      <input matInput [matDatepicker]="picker" [ngModel]="oldDate.value" name="plannedDate" #plannedDate ="ngModel">
+      <input
+        matInput
+        [matDatepicker]="picker"
+        [ngModel]="oldDate.value"
+        name="plannedDate"
+        #plannedDate="ngModel"
+      />
       <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-      <mat-datepicker #picker>
-      </mat-datepicker>
+      <mat-datepicker #picker> </mat-datepicker>
     </mat-form-field>
 
-    <mat-checkbox class="example-margin" [ngModel]="task.repeatable" name="repeatable" #repeatable="ngModel">Powtarzające się zadanie</mat-checkbox>
+    <mat-checkbox
+      class="example-margin"
+      [ngModel]="task.repeatable"
+      name="repeatable"
+      #repeatable="ngModel"
+      >Recurring task</mat-checkbox
+    >
     <br />
     <br />
 
-    <button
-    mat-raised-button
-    color="primary"
-    type="submit" *ngIf="!isLoading">Dodaj zadanie</button>
+    <button mat-raised-button color="primary" type="submit" *ngIf="!isLoading">
+      Add task
+    </button>
   </form>
 </mat-card>
-
-
-

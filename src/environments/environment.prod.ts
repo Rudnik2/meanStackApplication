@@ -1,4 +1,5 @@
 export const environment = {
   production: true,
-  apiUrl: 'http://localhost:3000/api'
+  apiUrl:
+    'http://test-application-env.eba-j2afnunp.eu-north-1.elasticbeanstalk.com/api',
 };

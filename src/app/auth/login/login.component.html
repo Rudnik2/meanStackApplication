@@ -2,21 +2,36 @@
   <mat-spinner *ngIf="isLoading"></mat-spinner>
   <form (submit)="onLogin(loginForm)" #loginForm="ngForm" *ngIf="!isLoading">
     <mat-form-field>
-      <input matInput name="email" ngModel type="email" placeholder="Email" #emailInput="ngModel" required email>
-      <mat-error *ngIf="emailInput.invalid">Wpisz poprawny e-mail</mat-error>
+      <input
+        matInput
+        name="email"
+        ngModel
+        type="email"
+        placeholder="Email"
+        #emailInput="ngModel"
+        required
+        email
+      />
+      <mat-error *ngIf="emailInput.invalid">Enter valid e-mail</mat-error>
     </mat-form-field>
     <mat-form-field>
-      <input type="password" name="password" ngModel matInput placeholder="Password" #passwordInput="ngModel" required>
-      <mat-error *ngIf="passwordInput.invalid">Wpisz poprawne hasło</mat-error>
+      <input
+        type="password"
+        name="password"
+        ngModel
+        matInput
+        placeholder="Password"
+        #passwordInput="ngModel"
+        required
+      />
+      <mat-error *ngIf="passwordInput.invalid">Enter valid password</mat-error>
     </mat-form-field>
-    <a routerLink="/request-reset-password" routerLinkActive="mat-accent">Zapomniałem hasła</a>
-    <br/>
-    <button
-    mat-raised-button
-    color="primary"
-    type="submit" *ngIf="!isLoading">Zaloguj się</button>
+    <a routerLink="/request-reset-password" routerLinkActive="mat-accent"
+      >I forgot password</a
+    >
+    <br />
+    <button mat-raised-button color="primary" type="submit" *ngIf="!isLoading">
+      Sign in
+    </button>
   </form>
 </mat-card>
-
-
-
